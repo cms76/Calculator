@@ -9,13 +9,19 @@ function clearDisplay() {
 }
 
 function appendToDisplay(char) {
+    const display = document.getElementById('display');
+    if (char == '.')
+    {
+        if (display.value.includes('.')) {
+            return; // Do not append if a dot already exists
+        }
+    }
     // if a new number is pressed after a result, reset the display
     if (isResult) {
         clearDisplay();
         isResult = false; // Reset the result flag
     }
     // Appends a character to the display, ensuring the value is no longer than 10 characters
-    const display = document.getElementById('display');
     const operators = ['+', '-', ':', 'x'];
     if (operators.some(op => display.value.includes(op))) {
         // Save the value before the operator to operand1 and clear the display
@@ -66,8 +72,9 @@ function calculateResult() {
         result = calculate(operand1, operand2, lastOperator);
     }   
 
-    display.value = result; // Display the result
-    operand1 = 0; // Rest the operand1 - the result is stored in display
+    result = result.toString().slice(0, 10); // Truncate the result to 10 characters
+    display.value = result; // Display the truncated result
+    operand1 = 0; // Reset operand1 - the result is stored in display
     lastOperator = "+"; // Reset the operator
     isResult = true; // Set the result flag
 }
